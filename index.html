@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Compiler</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+        }
+       .container { max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; margin-bottom: 20px; color: #00ff88; }
+        select, textarea, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+        }
+        select {
+            background: #2d2d2d;
+            color: #fff;
+            cursor: pointer;
+        }
+        textarea {
+            background: #2d2d2d;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            min-height: 200px;
+        }
+        button {
+            background: #007acc;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover { background: #005a9e; }
+       .output {
+            background: #000;
+            border: 2px solid #00ff88;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            min-height: 100px;
+        }
+       .output h3 { color: #00ff88; margin-bottom: 10px; }
+        #result {
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Online Compiler</h1>
+        
+        <select id="language">
+            <option value="C">C</option>
+            <option value="C++">C++</option>
+            <option value="Java">Java</option>
+            <option value="Python">Python</option>
+        </select>
+
+        <textarea id="code" placeholder="Apna code yaha likho...">#include<stdio.h>
+int main(){
+    printf("Hello dev");
+    return 0;
+}</textarea>
+        
+        <button onclick="runCode()">▶ Run Code</button>
+        
+        <div class="output">
+            <h3>Output:</h3>
+            <div id="result">Code likh ke Run Code dabao...</div>
+        </div>
+    </div>
+
+    <script>
+        function runCode() {
+            let code = document.getElementById("code").value;
+            let language = document.getElementById("language").value;
+            let result = document.getElementById("result");
+            
+            result.innerText = "Running...";
+            
+            setTimeout(() => {
+                // Simple fake output logic
+                if (code.includes('printf("Hello dev")') || code.includes('printf("dev")')) {
+                    result.innerText = "Hello dev";
+                } 
+                else if (code.includes('printf')) {
+                    // printf ke andar jo likha hai wo extract kar
+                    let match = code.match(/printf\("(.*?)"\)/);
+                    if (match) {
+                        result.innerText = match[1];
+                    } else {
+                        result.innerText = "Hello World";
+                    }
+                }
+                else if (code.includes('cout')) {
+                    let match = code.match(/cout\s*<<\s*"(.*?)"/);
+                    result.innerText = match? match[1] : "Hello World";
+                }
+                else if (code.includes('System.out.print')) {
+                    let match = code.match(/System\.out\.print.*?"(.*?)"/);
+                    result.innerText = match? match[1] : "Hello World";
+                }
+                else if (code.includes('print')) {
+                    let match = code.match(/print\(["'](.*?)["']\)/);
+                    result.innerText = match? match[1] : "Hello World";
+                }
+                else {
+                    result.innerText = "Hello dev";
+                }
+            }, 800);
+        }
+    </script>
+</body>
+</html>
